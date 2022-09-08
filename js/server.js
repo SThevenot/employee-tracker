@@ -8,41 +8,42 @@ var data;
 const cTable = require("console.table");
 const { getRandomValues } = require("crypto");
 //connect to mysql
-
-inquirer
-  .prompt([
-    {
-      type: "checkbox",
-      message: "What would you like to do?",
-      choices: [
-        "view all departments",
-        "view all roles",
-        "view all employees",
-        "add a department",
-        "add a role",
-        "add an employee",
-        "update an employee role",
-      ],
-      name: "menu",
-    },
-  ])
-  .then((data) => {
-    menu = data.menu;
-    if (menu == "add a department") {
-      getDepartment();
-    }
-    if (menu == "add a role") {
-      getRole();
-    }
-    if (menu == "add an employee") {
-      getEmployee();
-    }
-    if (menu == "update an employee role") {
-      getUpdate();
-    } else {
-      queryFunctions();
-    }
-  });
+const getStart = () => {
+  inquirer
+    .prompt([
+      {
+        type: "checkbox",
+        message: "What would you like to do?",
+        choices: [
+          "view all departments",
+          "view all roles",
+          "view all employees",
+          "add a department",
+          "add a role",
+          "add an employee",
+          "update an employee role",
+        ],
+        name: "menu",
+      },
+    ])
+    .then((data) => {
+      menu = data.menu;
+      if (menu == "add a department") {
+        getDepartment();
+      }
+      if (menu == "add a role") {
+        getRole();
+      }
+      if (menu == "add an employee") {
+        getEmployee();
+      }
+      if (menu == "update an employee role") {
+        getUpdate();
+      } else {
+        queryFunctions();
+      }
+    });
+};
 function queryFunctions(data) {
   const db = mysql.createConnection(
     {
@@ -56,16 +57,19 @@ function queryFunctions(data) {
   if (menu == "view all departments") {
     db.query("SELECT * FROM department;", function (err, results) {
       console.table(results);
+      getStart();
     });
   }
   if (menu == "view all roles") {
     db.query("SELECT * FROM role;", function (err, results) {
       console.table(results);
+      getStart();
     });
   }
   if (menu == "view all employees") {
     db.query("SELECT * FROM employee;", function (err, results) {
       console.table(results);
+      getStart();
     });
   }
 }
@@ -96,6 +100,7 @@ const getDepartment = () => {
           console.log(`${data.departmentName} was successfully added!`);
           db.query("SELECT * FROM department;", function (err, results) {
             console.table(results);
+            return getStart();
           });
         }
       );
@@ -139,6 +144,7 @@ const getRole = () => {
           );
           db.query("SELECT * FROM role;", function (err, results) {
             console.table(results);
+            return getStart();
           });
         }
       );
@@ -187,6 +193,7 @@ const getEmployee = () => {
           );
           db.query("SELECT * FROM employee;", function (err, results) {
             console.table(results);
+            return getStart();
           });
         }
       );
@@ -243,66 +250,100 @@ const getUpdate = () => {
         console.log("Connected to tracker_db satabase")
       );
       const test = data.updateEmployee;
-      var firstName = JSON.stringify(test).replace(/[^a-zA-Z0-9 ]/g, '').split(" ")[0];
+      var firstName = JSON.stringify(test)
+        .replace(/[^a-zA-Z0-9 ]/g, "")
+        .split(" ")[0];
       if (data.updateRole == "Lead Salesman") {
-        db.query(`UPDATE employee SET role_id=1 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=1 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "Salesman") {
-        db.query(`UPDATE employee SET role_id=2 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=2 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "CFO") {
-        db.query(`UPDATE employee SET role_id=3 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=3 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "Accountant") {
-        db.query(`UPDATE employee SET role_id=4 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=4 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "HR Rep") {
-        db.query(`UPDATE employee SET role_id=1 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=1 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "Customer Service Rep") {
-        db.query(`UPDATE employee SET role_id=5 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=5 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "Manager") {
-        db.query(`UPDATE employee SET role_id=6 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=6 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "Assistant to the manager") {
-        db.query(`UPDATE employee SET role_id=7 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=7 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "Janitor") {
-        db.query(`UPDATE employee SET role_id=8 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=8 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
       if (data.updateRole == "Quality Assurance Manager") {
-        db.query(`UPDATE employee SET role_id=9 WHERE first_name="${firstName}";`);
+        db.query(
+          `UPDATE employee SET role_id=9 WHERE first_name="${firstName}";`
+        );
         db.query("SELECT * FROM employee;", function (err, results) {
           console.table(results);
+          return getStart();
         });
       }
     });
 };
+
+getStart();
